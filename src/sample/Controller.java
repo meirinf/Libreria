@@ -197,11 +197,12 @@ public class Controller {
 
         Date today = new Date();
         for (int iterador = 0; iterador < prestecs.size(); iterador++) {
-            //Aqui el metodo que utilizo es que si
-            if (today.equals(prestecs.get(iterador).getDataFinal()) || today.after(prestecs.get(iterador).getDataFinal())) {
+            //Aqui el metodo que utilizo es que si la fecha de devolución es diferente a la fecha final es un moroso
+            today = prestecs.get(iterador).getFechaDebol();
+            if (today.after(prestecs.get(iterador).getDataFinal()) ) {
                 librosFueraPlazo.add(prestecs.get(iterador).getLlibre().toString() +
-                        "\n     Fecha actual: " + new Date().toString() +
-                        "\n     Fecha limite: " + prestecs.get(iterador).getDataFinal().toString());
+                        "\n     Fecha de entrega : " + prestecs.get(iterador).getFechaDebol().toString()+
+                        "\n     Fecha limite : " + prestecs.get(iterador).getDataFinal().toString());
             }
         }
 
@@ -226,7 +227,7 @@ public class Controller {
         for (int iterador = 0; iterador < prestecs.size(); iterador++) {
             if (today.equals(prestecs.get(iterador).getDataFinal()) || today.after(prestecs.get(iterador).getDataFinal())) {
                 sociosFueraPlazo.add(prestecs.get(iterador).getSoci().toString() +
-                        "\n     Fecha Actual : " + new Date().toString() +
+                        "\n     Fecha de entrega : " + prestecs.get(iterador).getFechaDebol().toString()+
                         "\n     Fecha limite : " + prestecs.get(iterador).getDataFinal().toString());
             }
         }
@@ -332,11 +333,13 @@ public class Controller {
                 // Extraemos las fechas de nuestro campo de texto y le damos el formato correcto
                 Date dataInici = formatData.parse(campoTexto3.getText());
                 Date dataFinal = formatData.parse(campoTexto4.getText());
+                Date dataDevol = formatData.parse(campoTexto5.getText());
 
                 ocultarTodo();       // Primero escondemos todos los objetos
 
                 prestec.setDataInici(dataInici);
                 prestec.setDataFinal(dataFinal);
+                prestec.setFechaDebol(dataDevol);
 
                 // Y se comparan las fechas
 
@@ -416,9 +419,11 @@ public class Controller {
         campoTexto2.setPromptText("Nombre del socio : ");
         campoTexto3.setPromptText("Fecha de inicio  del prestamo DD/MM/YYYY : ");
         campoTexto4.setPromptText("Fecha final del prestamo Final DD/MM/YYYY");
+        campoTexto5.setPromptText("Fecha de entrega del libro DD/MM/YY");
         textoAyudaFechas.setText("\n Los textos de las fechas tienen que estar formados de est forma :  \"  DD/MM/YYYY  \"");
 
         mostarCamposCrear(true);
+        campoTexto5.setVisible(true);
         textoAyudaFechas.setVisible(true);
     }
 
@@ -454,7 +459,7 @@ public class Controller {
         tipoBusqueda = "busquedaPorAutor";
 
         // Establecemos el texto del campo y el titulo
-        textoInfoSeccion.setText("\nBuscar libros por autor.");
+        textoInfoSeccion.setText("\n Buscar libros por autor.");
         campoBusqueda.setPromptText("Autor");
 
         mostrarCamposBusqueda();
@@ -701,10 +706,13 @@ public class Controller {
             buttonModificar.requestFocus();
         }
         else if(tipoModificar.equals("prestamo")){
-            ocultarTodo();
+
             buttonBorrarItem.setVisible(true);
             textoInfoSeccion.setVisible(false);
+            ocultarTodo();
+
         }
+
     }
 
     public void mostarCamposCrear(boolean limpiarCampos) {

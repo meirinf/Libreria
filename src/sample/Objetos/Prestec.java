@@ -56,6 +56,7 @@ public class Prestec implements Serializable {
     public String toString() {
         return "     Fecha inicio : " + dataInici +
                 "\n     Fecha fin: " + dataFinal +
+                "\n     Fecha de devolución: " + fechaDebol +
                 "\n     Socio : " + soci.toString() +
                 "\n     Libro : " + llibre.toString();
     }
