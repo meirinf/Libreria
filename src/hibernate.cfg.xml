@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-configuration PUBLIC "-//Hibernate/Hibernate Configuration DTD 3.0//EN"
+        "http://hibernate.sourceforge.net/hibernate-configuration-3.0.dtd">
+<hibernate-configuration>
+    <session-factory>
+        <property name="connection.driver_class">org.postgresql.Driver</property>
+        <!--Aqui va la configuracion para la conexión a la BBDD-->
+        <property name="connection.url">jdbc:postgresql://172.31.73.189/Libreria</property>
+        <property name="connection.username"> Libreia</property>
+        <property name="connection.password">libreria</property>
+        <property name="connection.pool_size">1</property>
+        <property name="show_sql">true</property>
+        <property name="hbm2ddl.auto">update</property>
+        <!-- Aqui meto las clases de objeto que ejercen de tablas -->
+        <mapping class="sample.Objetos.Llibre" />
+        <mapping class="sample.Objetos.Prestec" />
+        <mapping class="sample.Objetos.Soci" />
+    </session-factory>
+</hibernate-configuration>
