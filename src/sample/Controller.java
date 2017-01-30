@@ -156,7 +156,7 @@ public class Controller {
         listView.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
-                tipoModificar = "Socio : ";
+                tipoModificar = "socio";
                 int idListView = listView.getSelectionModel().getSelectedIndex();
                 mostrarCamposModificar(idListView);
             }
@@ -183,7 +183,7 @@ public class Controller {
         listView.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
-                tipoModificar = "Prestamo : ";
+                tipoModificar = "prestamo";
                 buttonBorrarItem.setVisible(true);
             }
         });
@@ -199,7 +199,7 @@ public class Controller {
         for (int iterador = 0; iterador < prestecs.size(); iterador++) {
             //Aqui el metodo que utilizo es que si la fecha de devolución es diferente a la fecha final es un moroso
             today = prestecs.get(iterador).getFechaDebol();
-            if (today.after(prestecs.get(iterador).getDataFinal()) ) {
+            if (!today.equals(prestecs.get(iterador).getDataFinal())||today.after(prestecs.get(iterador).getDataFinal())) {
                 librosFueraPlazo.add(prestecs.get(iterador).getLlibre().toString() +
                         "\n     Fecha de entrega : " + prestecs.get(iterador).getFechaDebol().toString()+
                         "\n     Fecha limite : " + prestecs.get(iterador).getDataFinal().toString());
@@ -225,7 +225,8 @@ public class Controller {
 
         Date today = new Date();
         for (int iterador = 0; iterador < prestecs.size(); iterador++) {
-            if (today.equals(prestecs.get(iterador).getDataFinal()) || today.after(prestecs.get(iterador).getDataFinal())) {
+            today = prestecs.get(iterador).getFechaDebol();
+            if (!today.equals(prestecs.get(iterador).getDataFinal())||today.before(prestecs.get(iterador).getDataFinal())) {
                 sociosFueraPlazo.add(prestecs.get(iterador).getSoci().toString() +
                         "\n     Fecha de entrega : " + prestecs.get(iterador).getFechaDebol().toString()+
                         "\n     Fecha limite : " + prestecs.get(iterador).getDataFinal().toString());
@@ -259,11 +260,11 @@ public class Controller {
 
             // Y le asignamos su información
             llibre.setTitol(campoTexto1.getText());
-            llibre.setNombreExemplars(campoTexto2.getText());
+            llibre.setAutor(campoTexto2.getText());
             llibre.setEditorial(campoTexto3.getText());
             llibre.setNombrePagines(campoTexto4.getText());
             llibre.setAnyEdicio(campoTexto5.getText());
-            llibre.setAutor(campoTexto6.getText());
+            llibre.setNombreExemplars(campoTexto6.getText());
 
             observableLlibres.add(llibre.toString());
             llibres.add(llibre);
@@ -306,7 +307,7 @@ public class Controller {
     private void afegirPrestec() {
 
         // Comprobamos si se han rellenado todos los campos
-        if (campoTexto1.getText().equals("") || campoTexto2.getText().equals("") ||campoTexto3.getText().equals("") ||campoTexto4.getText().equals("")) {
+        if (campoTexto1.getText().equals("") || campoTexto2.getText().equals("") ||campoTexto3.getText().equals("") ||campoTexto4.getText().equals("")||campoTexto5.getText().equals("")) {
             textoInfoSeccion.setText("\nSe tienen que llenar correctamente todos los datos ");
         }
         else {
@@ -387,11 +388,11 @@ public class Controller {
 
         textoInfoSeccion.setText("\n Introduce el nuevo libro : ");
         campoTexto1.setPromptText("Titulo");
-        campoTexto2.setPromptText("Numero de ejemplares ");
+        campoTexto2.setPromptText("Autor ");
         campoTexto3.setPromptText("Editorial");
         campoTexto4.setPromptText("Numero de paginas");
         campoTexto5.setPromptText("Año de edicion ");
-        campoTexto6.setPromptText("Autor");
+        campoTexto6.setPromptText("Numero de ejemplares");
 
         mostarCamposCrear(true);
     }
@@ -403,7 +404,7 @@ public class Controller {
         textoInfoSeccion.setText("\n INTRODUCE LOS DATOS DEL SOCIO : ");
         campoTexto1.setPromptText("Nombre : ");
         campoTexto2.setPromptText("Apellidos : ");
-        campoTexto3.setPromptText("Edat : ");
+        campoTexto3.setPromptText("Edad : ");
         campoTexto4.setPromptText("Direccion : ");
         campoTexto5.setPromptText("Telefono : ");
 
@@ -480,7 +481,7 @@ public class Controller {
 
     public void buscarSocioPorApellido(ActionEvent actionEvent) {
 
-        tipoBusqueda = "busquedaPorApellido";   // le damos el valor correspondiente a la varible de tipo de busqueda
+        tipoBusqueda = "busquedaPorApellido";
 
         // Establecemos el texto del campo y el titulo
         textoInfoSeccion.setText("\n Buscar socios por apellido.");
