@@ -184,6 +184,7 @@ public class Controller {
             @Override
             public void handle(MouseEvent event) {
                 tipoModificar = "prestamo";
+                int idListView = listView.getSelectionModel().getSelectedIndex();
                 buttonBorrarItem.setVisible(true);
             }
         });

@@ -132,7 +132,7 @@ public class DAO {
         transaction = session.beginTransaction();
 
         // Obtenemos todos los libros
-        Query query = session.createQuery("FROM Llibre ");
+        Query query = session.createQuery("FROM Llibre");
         return (ArrayList<Llibre>) query.list();
     }
 
@@ -143,7 +143,7 @@ public class DAO {
         transaction = session.beginTransaction();
 
         // Obtenemos todos los socios
-        Query query = session.createQuery("FROM Soci ");
+        Query query = session.createQuery("FROM Soci");
         return (ArrayList<Soci>) query.list();
     }
 
