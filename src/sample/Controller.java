@@ -319,6 +319,8 @@ public class Controller {
             for (int iterador = 0; iterador < llibres.size(); iterador++) {
                 if (llibres.get(iterador).getTitol().toLowerCase().equals(campoTexto1.getText().toLowerCase())) {
                     prestec.setLlibre(llibres.get(iterador));
+                 String ejemplares = llibres.get(iterador).getNombreExemplars();
+                    //ejemplares aqui falta descontar los ejemplares
                 }
             }
 
