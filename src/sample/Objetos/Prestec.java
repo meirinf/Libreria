@@ -25,7 +25,13 @@ public class Prestec implements Serializable {
 
     }
 
+
     // Getters
+
+
+    public long getId() {
+        return id;
+    }
 
     public Llibre getLlibre() {return llibre;}
 
@@ -39,7 +45,13 @@ public class Prestec implements Serializable {
         return fechaDebol;
     }
 
+
     // Setters
+
+
+    public void setId(long id) {
+        this.id = id;
+    }
 
     public void setLlibre(Llibre llibre) {this.llibre = llibre;}
 

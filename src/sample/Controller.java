@@ -308,7 +308,7 @@ public class Controller {
     private void afegirPrestec() {
 
         // Comprobamos si se han rellenado todos los campos
-        if (campoTexto1.getText().equals("") || campoTexto2.getText().equals("") ||campoTexto3.getText().equals("") ||campoTexto4.getText().equals("")||campoTexto5.getText().equals("")) {
+        if (campoTexto1.getText().equals("") || campoTexto2.getText().equals("") ||campoTexto3.getText().equals("") ||campoTexto4.getText().equals("")) {
             textoInfoSeccion.setText("\nSe tienen que llenar correctamente todos los datos ");
         }
         else {
@@ -330,49 +330,30 @@ public class Controller {
             }
 
             try  {
+
                 DateFormat formatData = new SimpleDateFormat("mm/dd/yyyy");
 
                 // Extraemos las fechas de nuestro campo de texto y le damos el formato correcto
                 Date dataInici = formatData.parse(campoTexto3.getText());
                 Date dataFinal = formatData.parse(campoTexto4.getText());
-                Date dataDevol = formatData.parse(campoTexto5.getText());
 
-                ocultarTodo();       // Primero escondemos todos los objetos
+
+
+                       // Primero escondemos todos los objetos
 
                 prestec.setDataInici(dataInici);
                 prestec.setDataFinal(dataFinal);
-                prestec.setFechaDebol(dataDevol);
-
-                // Y se comparan las fechas
-
-                if(dataInici.equals(dataFinal)) {
-                    dateError = "Fechas Iguales";
-                    throw new InvalidDateException();
-                }
-
-                if (dataInici.after(dataFinal)) {
-                    dateError = "Fechas Incorrectas";
-                    throw new InvalidDateException();
-                }
 
                 try  {
                     observablePrestec.add(prestec.toString());
                     prestecs.add(prestec);
                     DAO.afegirPrestec(prestec);
+
+                    ocultarTodo();
                     listaPrestecs(null);
 
                 } catch (Exception one) {
                     textoInfoSeccion.setText("\n No esta disponible ");
-                }
-            }
-            catch(InvalidDateException two) {
-
-                if (dateError.equals("Fechas Iguales"))  {
-                    textoAyudaFechas.setText("\n ERROR: las fechas son iguales.");
-                }
-
-                if (dateError.equals("Fechas Incorrectas")) {
-                    textoAyudaFechas.setText("\n La fecha final no puede ser menor que la de inicio ");
                 }
             }
             catch (Exception three) {
@@ -421,11 +402,9 @@ public class Controller {
         campoTexto2.setPromptText("Nombre del socio : ");
         campoTexto3.setPromptText("Fecha de inicio  del prestamo DD/MM/YYYY : ");
         campoTexto4.setPromptText("Fecha final del prestamo Final DD/MM/YYYY");
-        campoTexto5.setPromptText("Fecha de entrega del libro DD/MM/YY");
         textoAyudaFechas.setText("\n Los textos de las fechas tienen que estar formados de est forma :  \"  DD/MM/YYYY  \"");
 
         mostarCamposCrear(true);
-        campoTexto5.setVisible(true);
         textoAyudaFechas.setVisible(true);
     }
 
@@ -548,7 +527,7 @@ public class Controller {
             scrollPane.setVisible(true);
 
             for (int iterador = 0; iterador < socis.size(); iterador++) {
-                if (socis.get(iterador).getNom().toLowerCase().equals(campoBusqueda.getText().toLowerCase())) {
+                if (socis.get(iterador).getNom().toLowerCase().equalsIgnoreCase(campoBusqueda.getText().toLowerCase())) {
                     busquedaNombre.add(socis.get(iterador).toString());
                 }
             }
@@ -570,7 +549,7 @@ public class Controller {
             scrollPane.setVisible(true);
 
             for (int iterador = 0; iterador < socis.size(); iterador++) {
-                if (socis.get(iterador).getCognom().toLowerCase().equals(campoBusqueda.getText().toLowerCase())){
+                if (socis.get(iterador).getCognom().toLowerCase().equalsIgnoreCase(campoBusqueda.getText().toLowerCase())){
                     busquedaApellidos.add(socis.get(iterador).toString());
                 }
             }
@@ -708,8 +687,6 @@ public class Controller {
             buttonModificar.requestFocus();
         }
         else if(tipoModificar.equals("prestamo")){
-
-            buttonBorrarItem.setVisible(true);
             textoInfoSeccion.setVisible(false);
             ocultarTodo();
 
