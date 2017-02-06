@@ -314,52 +314,61 @@ public class Controller {
         else {
             // Creamos un nuevo prestamo
             Prestec prestec = new Prestec();
+            int nuevo = 0;
 
             // Buscamos el libro introducido en nuestro array de libros y se lo asignamos al prestamo
             for (int iterador = 0; iterador < llibres.size(); iterador++) {
                 if (llibres.get(iterador).getTitol().toLowerCase().equals(campoTexto1.getText().toLowerCase())) {
                     prestec.setLlibre(llibres.get(iterador));
-                 String ejemplares = llibres.get(iterador).getNombreExemplars();
-                    //ejemplares aqui falta descontar los ejemplares
+                    nuevo = iterador;
+                    }
                 }
-            }
-
             // Buscamos el socio introducido en nuestro array de socios y se lo asignamos al prestamo
-            for (int iterador = 0; iterador < socis.size(); iterador++) {
-                if (socis.get(iterador).getNom().toLowerCase().equals(campoTexto2.getText().toLowerCase())) {
-                    prestec.setSoci(socis.get(iterador));
+            for (int it = 0; it < socis.size(); it++) {
+                if (socis.get(it).getNom().toLowerCase().equals(campoTexto2.getText().toLowerCase())) {
+                    prestec.setSoci(socis.get(it));
+                    String ejemplares = llibres.get(nuevo).getNombreExemplars();
+                    //ejemplares aqui Descontamos los ejemplares
+                    int cadena =  Integer.parseInt(ejemplares);
+                    if (cadena == 0){
+                        textoInfoSeccion.setText("\n No Quedan ejemplares ");
+                        break;
+                    }else {
+                        cadena = cadena -1;
+                        ejemplares = Integer.toString(cadena);
+                        llibres.get(nuevo).setNombreExemplars(ejemplares);
+                    }
+                    try  {
+
+                        DateFormat formatData = new SimpleDateFormat("mm/dd/yyyy");
+
+                        // Extraemos las fechas de nuestro campo de texto y le damos el formato correcto
+                        Date dataInici = formatData.parse(campoTexto3.getText());
+                        Date dataFinal = formatData.parse(campoTexto4.getText());
+
+
+
+                        // Primero escondemos todos los objetos
+
+                        prestec.setDataInici(dataInici);
+                        prestec.setDataFinal(dataFinal);
+
+                        try  {
+                            observablePrestec.add(prestec.toString());
+                            prestecs.add(prestec);
+                            DAO.afegirPrestec(prestec);
+
+                            ocultarTodo();
+                            listaPrestecs(null);
+
+                        } catch (Exception one) {
+                            textoInfoSeccion.setText("\n No esta disponible ");
+                        }
+                    }
+                    catch (Exception three) {
+                        textoInfoSeccion.setText("\n El formato es incorrecto. Introduce este formato \"DD/MM/YYYY\"\"");
+                    }
                 }
-            }
-
-            try  {
-
-                DateFormat formatData = new SimpleDateFormat("mm/dd/yyyy");
-
-                // Extraemos las fechas de nuestro campo de texto y le damos el formato correcto
-                Date dataInici = formatData.parse(campoTexto3.getText());
-                Date dataFinal = formatData.parse(campoTexto4.getText());
-
-
-
-                       // Primero escondemos todos los objetos
-
-                prestec.setDataInici(dataInici);
-                prestec.setDataFinal(dataFinal);
-
-                try  {
-                    observablePrestec.add(prestec.toString());
-                    prestecs.add(prestec);
-                    DAO.afegirPrestec(prestec);
-
-                    ocultarTodo();
-                    listaPrestecs(null);
-
-                } catch (Exception one) {
-                    textoInfoSeccion.setText("\n No esta disponible ");
-                }
-            }
-            catch (Exception three) {
-                textoInfoSeccion.setText("\n El formato es incorrecto. Introduce este formato \"DD/MM/YYYY\"\"");
             }
         }
     }
@@ -612,6 +621,23 @@ public class Controller {
             ocultarTodo();
             listaLlibres(null);
         }
+       else if(tipoModificar.equals("prestamo")){
+
+            int idSelected = listView.getSelectionModel().getSelectedIndex();
+
+            Prestec prestec = new Prestec();
+
+            prestec.setId(prestecs.get(idSelected).getId());
+
+
+            observablePrestec.set(idSelected , prestec.toString());
+            DAO.modificarPrestec(prestec);
+
+            ocultarTodo();
+            listaPrestecs(null);
+
+
+        }
     }
 
     public void borrarItem(ActionEvent actionEvent) {
@@ -689,8 +715,21 @@ public class Controller {
             buttonModificar.requestFocus();
         }
         else if(tipoModificar.equals("prestamo")){
-            textoInfoSeccion.setVisible(false);
+
+            tipoNuevo = "prestamo";
+
+            campoTexto1.setText(String.valueOf(prestecs.get(idListView).getId()));
+
             ocultarTodo();
+            mostarCamposCrear(false);
+
+            // La interfaz de modificar será igual a la de crear per con el botón distinto
+            buttonGuardar.setVisible(false);
+            buttonModificar.setVisible(true);
+            buttonBorrarItem.setVisible(true);
+            buttonModificar.requestFocus();
+
+
 
         }
 

@@ -123,6 +123,27 @@ public class DAO {
         }
     }
 
+    public void modificarPrestec(Prestec prestec) throws HibernateException {
+
+        try  {
+            // Con estas dos lineas hacemos la conexión a nuestra BBDD
+            session = HibernateUtil.getSessionFactory().openSession();
+            transaction = session.beginTransaction();
+
+            // Guardamos el socio
+            session.update(prestec);
+            transaction.commit();
+        }
+
+        catch (HibernateException one) {
+            transaction.rollback();
+            throw new HibernateException("Error al actualizar el Prestamo", one);
+        }
+        finally {
+            session.close();
+        }
+    }
+
     // Métodos para obtener información de la BBDD
 
     public ArrayList<Llibre> obtenirLlibres() {
